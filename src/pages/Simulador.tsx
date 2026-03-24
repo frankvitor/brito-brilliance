@@ -5,13 +5,36 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Input } from "@/components/ui/input";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
-function simular(inicial: number, aporte: number, taxaAnual: number, meta = 1_000_000) {
-  const taxaMensal = Math.pow(1 + taxaAnual / 100, 1 / 12) - 1;
+type Modo = "objetivo" | "prazo";
+
+interface DadoGrafico {
+  mes: number;
+  valor: number;
+  investido: number;
+}
+
+interface Resultado {
+  meses: number;
+  acumulado: number;
+  investido: number;
+  rendimentos: number;
+  dados: DadoGrafico[];
+  metaAtingida: boolean;
+}
+
+function simularPorObjetivo(inicial: number, aporte: number, taxaAnual: number, meta: number): Resultado {
+  if (meta <= 0) return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: false };
+  if (inicial >= meta) {
+    return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [{ mes: 0, valor: Math.round(inicial), investido: Math.round(inicial) }], metaAtingida: true };
+  }
+
+  const taxaMensal = taxaAnual > 0 ? Math.pow(1 + taxaAnual / 100, 1 / 12) - 1 : 0;
   let acumulado = inicial;
   let meses = 0;
-  const dados: { mes: number; valor: number; investido: number }[] = [];
+  const maxMeses = 1200;
+  const dados: DadoGrafico[] = [];
 
-  while (acumulado < meta && meses < 600) {
+  while (acumulado < meta && meses < maxMeses) {
     dados.push({ mes: meses, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * meses) });
     acumulado = acumulado * (1 + taxaMensal) + aporte;
     meses++;
@@ -25,6 +48,33 @@ function simular(inicial: number, aporte: number, taxaAnual: number, meta = 1_00
     investido: Math.round(totalInvestido),
     rendimentos: Math.round(acumulado - totalInvestido),
     dados,
+    metaAtingida: meses < maxMeses,
+  };
+}
+
+function simularPorPrazo(inicial: number, aporte: number, taxaAnual: number, prazoAnos: number): Resultado {
+  if (prazoAnos <= 0) return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: true };
+
+  const taxaMensal = taxaAnual > 0 ? Math.pow(1 + taxaAnual / 100, 1 / 12) - 1 : 0;
+  let acumulado = inicial;
+  const totalMeses = Math.round(prazoAnos * 12);
+  const dados: DadoGrafico[] = [];
+
+  for (let m = 0; m <= totalMeses; m++) {
+    dados.push({ mes: m, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * m) });
+    if (m < totalMeses) {
+      acumulado = acumulado * (1 + taxaMensal) + aporte;
+    }
+  }
+
+  const totalInvestido = inicial + aporte * totalMeses;
+  return {
+    meses: totalMeses,
+    acumulado: Math.round(acumulado),
+    investido: Math.round(totalInvestido),
+    rendimentos: Math.round(acumulado - totalInvestido),
+    dados,
+    metaAtingida: true,
   };
 }
 
@@ -41,18 +91,44 @@ function formatTempo(meses: number) {
 }
 
 export default function Simulador() {
+  const [modo, setModo] = useState<Modo>("objetivo");
   const [inicial, setInicial] = useState(10000);
   const [aporte, setAporte] = useState(2000);
   const [taxa, setTaxa] = useState(12);
+  const [objetivo, setObjetivo] = useState(1000000);
+  const [prazo, setPrazo] = useState(20);
 
-  const resultado = useMemo(() => simular(inicial, aporte, taxa), [inicial, aporte, taxa]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (inicial < 0) e.inicial = "Não pode ser negativo";
+    if (aporte < 0) e.aporte = "Não pode ser negativo";
+    if (taxa < 0) e.taxa = "Não pode ser negativa";
+    if (modo === "objetivo" && objetivo <= 0) e.objetivo = "Deve ser maior que zero";
+    if (modo === "prazo" && prazo <= 0) e.prazo = "Deve ser maior que zero";
+    return e;
+  };
+
+  const resultado = useMemo(() => {
+    const e = validate();
+    setErrors(e);
+    if (Object.keys(e).length > 0) return null;
+    return modo === "objetivo"
+      ? simularPorObjetivo(inicial, aporte, taxa, objetivo)
+      : simularPorPrazo(inicial, aporte, taxa, prazo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inicial, aporte, taxa, objetivo, prazo, modo]);
 
   const chartData = useMemo(() => {
+    if (!resultado) return [];
     const d = resultado.dados;
     if (d.length <= 60) return d;
     const step = Math.ceil(d.length / 60);
     return d.filter((_, i) => i % step === 0 || i === d.length - 1);
-  }, [resultado.dados]);
+  }, [resultado]);
+
+  const modoLabel = modo === "objetivo" ? "Por objetivo" : "Por prazo";
 
   return (
     <div className="min-h-screen">
@@ -62,17 +138,36 @@ export default function Simulador() {
           <ScrollReveal>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold">Ferramenta</p>
             <h1 className="text-4xl font-extrabold text-blue-deep md:text-5xl">
-              Simulador de Meta Financeira
+              Simulador Financeiro
             </h1>
             <p className="mt-3 max-w-xl text-muted-foreground">
-              Ajuste os valores abaixo e veja em tempo real quanto tempo falta para atingir R$ 1.000.000.
+              {modo === "objetivo"
+                ? "Descubra quanto tempo levará para atingir seu objetivo financeiro."
+                : "Veja quanto seu patrimônio pode crescer em um determinado período."}
             </p>
           </ScrollReveal>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-[380px_1fr]">
+          <div className="mt-12 grid gap-8 lg:grid-cols-[400px_1fr]">
             {/* INPUTS */}
             <ScrollReveal>
               <div className="rounded-2xl border bg-white p-6 shadow-sm space-y-6">
+                {/* MODE SELECTOR */}
+                <div className="flex rounded-xl bg-[#F5F7F6] p-1">
+                  {(["objetivo", "prazo"] as Modo[]).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setModo(m)}
+                      className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all ${
+                        modo === m
+                          ? "bg-blue-deep text-white shadow-sm"
+                          : "text-blue-deep/60 hover:text-blue-deep"
+                      }`}
+                    >
+                      {m === "objetivo" ? "Por objetivo" : "Por prazo"}
+                    </button>
+                  ))}
+                </div>
+
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Valor inicial (R$)</label>
                   <Input
@@ -82,7 +177,9 @@ export default function Simulador() {
                     onChange={(e) => setInicial(Number(e.target.value))}
                     placeholder="10000"
                   />
+                  {errors.inicial && <p className="mt-1 text-xs text-red-500">{errors.inicial}</p>}
                 </div>
+
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Aporte mensal (R$)</label>
                   <Input
@@ -92,7 +189,9 @@ export default function Simulador() {
                     onChange={(e) => setAporte(Number(e.target.value))}
                     placeholder="2000"
                   />
+                  {errors.aporte && <p className="mt-1 text-xs text-red-500">{errors.aporte}</p>}
                 </div>
+
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Taxa (% ao ano)</label>
                   <Input
@@ -103,91 +202,149 @@ export default function Simulador() {
                     onChange={(e) => setTaxa(Number(e.target.value))}
                     placeholder="12"
                   />
+                  {errors.taxa && <p className="mt-1 text-xs text-red-500">{errors.taxa}</p>}
                   <p className="mt-1.5 text-xs text-muted-foreground">
-                    Exemplo: 8% (conservador), 12% (moderado), 15%+ (mais agressivo)
+                    Exemplo: 8% ao ano, 10% ao ano, 12% ao ano
                   </p>
                 </div>
+
+                {/* CAMPO VARIÁVEL */}
+                {modo === "objetivo" ? (
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-blue-deep">Objetivo financeiro (R$)</label>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={objetivo}
+                      onChange={(e) => setObjetivo(Number(e.target.value))}
+                      placeholder="1000000"
+                    />
+                    {errors.objetivo && <p className="mt-1 text-xs text-red-500">{errors.objetivo}</p>}
+                  </div>
+                ) : (
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-blue-deep">Prazo de investimento (anos)</label>
+                    <Input
+                      type="number"
+                      min={1}
+                      step={1}
+                      value={prazo}
+                      onChange={(e) => setPrazo(Number(e.target.value))}
+                      placeholder="20"
+                    />
+                    {errors.prazo && <p className="mt-1 text-xs text-red-500">{errors.prazo}</p>}
+                  </div>
+                )}
               </div>
             </ScrollReveal>
 
             {/* RESULTS */}
             <ScrollReveal delay={120}>
               <div className="space-y-6">
-                <div className="rounded-2xl bg-blue-deep p-6 text-white md:p-8">
-                  <p className="text-sm text-white/60">Tempo estimado para R$ 1 milhão</p>
-                  <p className="mt-1 text-4xl font-extrabold text-gold tabular-nums">
-                    {resultado.meses >= 600 ? "Acima de 50 anos" : formatTempo(resultado.meses)}
-                  </p>
-                  <div className="mt-6 grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-xs text-white/50">Acumulado</p>
-                      <p className="text-lg font-bold tabular-nums">{formatMoney(resultado.acumulado)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50">Investido</p>
-                      <p className="text-lg font-bold tabular-nums">{formatMoney(resultado.investido)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50">Rendimentos</p>
-                      <p className="text-lg font-bold text-gold tabular-nums">{formatMoney(resultado.rendimentos)}</p>
-                    </div>
-                  </div>
-                </div>
+                {resultado ? (
+                  <>
+                    <div className="rounded-2xl bg-blue-deep p-6 text-white md:p-8">
+                      <p className="text-sm text-white/60">
+                        {modo === "objetivo"
+                          ? "Tempo estimado para atingir sua meta"
+                          : "Patrimônio estimado ao final do período"}
+                      </p>
 
-                <div className="rounded-2xl border bg-white p-4 shadow-sm md:p-6">
-                  <p className="mb-4 text-sm font-semibold text-blue-deep">Evolução do patrimônio</p>
-                  <div className="h-64 md:h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={chartData}>
-                        <defs>
-                          <linearGradient id="gradVal" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#C9A227" stopOpacity={0.3} />
-                            <stop offset="100%" stopColor="#C9A227" stopOpacity={0} />
-                          </linearGradient>
-                          <linearGradient id="gradInv" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#0A2540" stopOpacity={0.15} />
-                            <stop offset="100%" stopColor="#0A2540" stopOpacity={0} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis
-                          dataKey="mes"
-                          tickFormatter={(v) => `${Math.round(v / 12)}a`}
-                          fontSize={11}
-                          tick={{ fill: "#6b7280" }}
-                        />
-                        <YAxis
-                          tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                          fontSize={11}
-                          tick={{ fill: "#6b7280" }}
-                          width={50}
-                        />
-                        <Tooltip
-                          formatter={(value: number, name: string) => [
-                            formatMoney(value),
-                            name === "valor" ? "Acumulado" : "Investido",
-                          ]}
-                          labelFormatter={(label) => `Mês ${label}`}
-                          contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }}
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey="investido"
-                          stroke="#0A2540"
-                          strokeWidth={2}
-                          fill="url(#gradInv)"
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey="valor"
-                          stroke="#C9A227"
-                          strokeWidth={2}
-                          fill="url(#gradVal)"
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
+                      {modo === "objetivo" ? (
+                        <>
+                          <p className="mt-1 text-4xl font-extrabold text-gold tabular-nums">
+                            {!resultado.metaAtingida
+                              ? "Meta não atingida"
+                              : resultado.meses === 0
+                                ? "Meta já atingida"
+                                : formatTempo(resultado.meses)}
+                          </p>
+                          {!resultado.metaAtingida && (
+                            <p className="mt-2 text-sm text-white/50">
+                              Com os parâmetros informados, não foi possível atingir a meta dentro do limite da simulação.
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <p className="mt-1 text-4xl font-extrabold text-gold tabular-nums">
+                          {formatMoney(resultado.acumulado)}
+                        </p>
+                      )}
+
+                      <div className="mt-6 grid grid-cols-3 gap-4">
+                        {modo === "prazo" && (
+                          <div>
+                            <p className="text-xs text-white/50">Prazo</p>
+                            <p className="text-lg font-bold tabular-nums">{formatTempo(resultado.meses)}</p>
+                          </div>
+                        )}
+                        {modo === "objetivo" && (
+                          <div>
+                            <p className="text-xs text-white/50">Acumulado</p>
+                            <p className="text-lg font-bold tabular-nums">{formatMoney(resultado.acumulado)}</p>
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-xs text-white/50">Investido</p>
+                          <p className="text-lg font-bold tabular-nums">{formatMoney(resultado.investido)}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-white/50">Rendimentos</p>
+                          <p className="text-lg font-bold text-gold tabular-nums">{formatMoney(resultado.rendimentos)}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {chartData.length > 1 && (
+                      <div className="rounded-2xl border bg-white p-4 shadow-sm md:p-6">
+                        <p className="mb-4 text-sm font-semibold text-blue-deep">Evolução do patrimônio</p>
+                        <div className="h-64 md:h-72">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={chartData}>
+                              <defs>
+                                <linearGradient id="gradVal" x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor="#C9A227" stopOpacity={0.3} />
+                                  <stop offset="100%" stopColor="#C9A227" stopOpacity={0} />
+                                </linearGradient>
+                                <linearGradient id="gradInv" x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor="#0A2540" stopOpacity={0.15} />
+                                  <stop offset="100%" stopColor="#0A2540" stopOpacity={0} />
+                                </linearGradient>
+                              </defs>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                              <XAxis
+                                dataKey="mes"
+                                tickFormatter={(v) => `${Math.round(v / 12)}a`}
+                                fontSize={11}
+                                tick={{ fill: "#6b7280" }}
+                              />
+                              <YAxis
+                                tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                                fontSize={11}
+                                tick={{ fill: "#6b7280" }}
+                                width={50}
+                              />
+                              <Tooltip
+                                formatter={(value: number, name: string) => [
+                                  formatMoney(value),
+                                  name === "valor" ? "Acumulado" : "Investido",
+                                ]}
+                                labelFormatter={(label) => `Mês ${label}`}
+                                contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }}
+                              />
+                              <Area type="monotone" dataKey="investido" stroke="#0A2540" strokeWidth={2} fill="url(#gradInv)" />
+                              <Area type="monotone" dataKey="valor" stroke="#C9A227" strokeWidth={2} fill="url(#gradVal)" />
+                            </AreaChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="rounded-2xl border bg-white p-8 text-center text-muted-foreground">
+                    Corrija os campos para ver a simulação.
                   </div>
-                </div>
+                )}
               </div>
             </ScrollReveal>
           </div>
