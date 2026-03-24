@@ -32,14 +32,14 @@ function simularPorObjetivo(inicial: number, aporte: number, taxaAnual: number, 
   let acumulado = inicial;
   let meses = 0;
   const maxMeses = 1200;
-  const dados: DadoGrafico[] = [];
+  const dados: DadoGrafico[] = [{ mes: 0, valor: Math.round(inicial), investido: Math.round(inicial) }];
 
   while (acumulado < meta && meses < maxMeses) {
-    dados.push({ mes: meses, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * meses) });
-    acumulado = acumulado * (1 + taxaMensal) + aporte;
+    const rendimento = acumulado * taxaMensal;
+    acumulado = acumulado + rendimento + aporte;
     meses++;
+    dados.push({ mes: meses, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * meses) });
   }
-  dados.push({ mes: meses, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * meses) });
 
   const totalInvestido = inicial + aporte * meses;
   return {
