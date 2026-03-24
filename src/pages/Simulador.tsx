@@ -2,23 +2,8 @@ import { useState, useMemo } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-
-type Perfil = "conservador" | "moderado" | "agressivo";
-
-const taxas: Record<Perfil, number> = {
-  conservador: 8,
-  moderado: 12,
-  agressivo: 16,
-};
-
-const perfilLabels: Record<Perfil, string> = {
-  conservador: "Conservador",
-  moderado: "Moderado",
-  agressivo: "Agressivo",
-};
 
 function simular(inicial: number, aporte: number, taxaAnual: number, meta = 1_000_000) {
   const taxaMensal = Math.pow(1 + taxaAnual / 100, 1 / 12) - 1;
@@ -59,26 +44,9 @@ export default function Simulador() {
   const [inicial, setInicial] = useState(10000);
   const [aporte, setAporte] = useState(2000);
   const [taxa, setTaxa] = useState(12);
-  const [perfil, setPerfil] = useState<Perfil>("moderado");
 
   const resultado = useMemo(() => simular(inicial, aporte, taxa), [inicial, aporte, taxa]);
 
-  const cenarios = useMemo(
-    () =>
-      (["conservador", "moderado", "agressivo"] as Perfil[]).map((p) => ({
-        perfil: p,
-        label: perfilLabels[p],
-        ...simular(inicial, aporte, taxas[p]),
-      })),
-    [inicial, aporte]
-  );
-
-  const handlePerfilChange = (p: Perfil) => {
-    setPerfil(p);
-    setTaxa(taxas[p]);
-  };
-
-  // Thin out chart data for performance
   const chartData = useMemo(() => {
     const d = resultado.dados;
     if (d.length <= 60) return d;
@@ -135,24 +103,9 @@ export default function Simulador() {
                     onChange={(e) => setTaxa(Number(e.target.value))}
                     placeholder="12"
                   />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-blue-deep">Perfil de risco</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {(["conservador", "moderado", "agressivo"] as Perfil[]).map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => handlePerfilChange(p)}
-                        className={`rounded-lg px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.97] ${
-                          perfil === p
-                            ? "bg-blue-deep text-white shadow-md"
-                            : "bg-surface text-muted-foreground hover:bg-blue-deep/10"
-                        }`}
-                      >
-                        {perfilLabels[p]}
-                      </button>
-                    ))}
-                  </div>
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Exemplo: 8% (conservador), 12% (moderado), 15%+ (mais agressivo)
+                  </p>
                 </div>
               </div>
             </ScrollReveal>
@@ -160,7 +113,6 @@ export default function Simulador() {
             {/* RESULTS */}
             <ScrollReveal delay={120}>
               <div className="space-y-6">
-                {/* Summary */}
                 <div className="rounded-2xl bg-blue-deep p-6 text-white md:p-8">
                   <p className="text-sm text-white/60">Tempo estimado para R$ 1 milhão</p>
                   <p className="mt-1 text-4xl font-extrabold text-gold tabular-nums">
@@ -182,7 +134,6 @@ export default function Simulador() {
                   </div>
                 </div>
 
-                {/* Chart */}
                 <div className="rounded-2xl border bg-white p-4 shadow-sm md:p-6">
                   <p className="mb-4 text-sm font-semibold text-blue-deep">Evolução do patrimônio</p>
                   <div className="h-64 md:h-72">
@@ -241,38 +192,8 @@ export default function Simulador() {
             </ScrollReveal>
           </div>
 
-          {/* COMPARISON */}
           <ScrollReveal>
-            <div className="mt-14">
-              <h2 className="mb-6 text-2xl font-bold text-blue-deep">Comparação por perfil</h2>
-              <div className="grid gap-4 md:grid-cols-3">
-                {cenarios.map((c) => (
-                  <div
-                    key={c.perfil}
-                    className={`rounded-xl border p-6 transition-shadow hover:shadow-md ${
-                      c.perfil === perfil ? "border-gold shadow-md ring-1 ring-gold/30" : "bg-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-blue-deep">{c.label}</h3>
-                      <span className="rounded-full bg-surface px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
-                        {taxas[c.perfil]}% a.a.
-                      </span>
-                    </div>
-                    <p className="mt-4 text-2xl font-extrabold text-gold tabular-nums">{formatTempo(c.meses)}</p>
-                    <div className="mt-3 space-y-1 text-sm text-muted-foreground">
-                      <p>Acumulado: <span className="font-semibold text-foreground tabular-nums">{formatMoney(c.acumulado)}</span></p>
-                      <p>Investido: <span className="font-semibold text-foreground tabular-nums">{formatMoney(c.investido)}</span></p>
-                      <p>Rendimentos: <span className="font-semibold text-gold tabular-nums">{formatMoney(c.rendimentos)}</span></p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal>
-            <p className="mt-8 text-center text-xs text-muted-foreground">
+            <p className="mt-10 text-center text-xs text-muted-foreground">
               Simulação ilustrativa, não constitui recomendação financeira.
             </p>
           </ScrollReveal>
