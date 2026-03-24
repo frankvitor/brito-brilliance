@@ -60,11 +60,11 @@ function simularPorPrazo(inicial: number, aporte: number, taxaAnual: number, pra
   const totalMeses = Math.round(prazoAnos * 12);
   const dados: DadoGrafico[] = [];
 
-  for (let m = 0; m <= totalMeses; m++) {
+  dados.push({ mes: 0, valor: Math.round(acumulado), investido: Math.round(inicial) });
+  for (let m = 1; m <= totalMeses; m++) {
+    const rendimento = acumulado * taxaMensal;
+    acumulado = acumulado + rendimento + aporte;
     dados.push({ mes: m, valor: Math.round(acumulado), investido: Math.round(inicial + aporte * m) });
-    if (m < totalMeses) {
-      acumulado = acumulado * (1 + taxaMensal) + aporte;
-    }
   }
 
   const totalInvestido = inicial + aporte * totalMeses;
