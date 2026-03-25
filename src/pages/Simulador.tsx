@@ -387,101 +387,6 @@ export default function Simulador() {
                       </div>
                     )}
 
-                    {/* INSIGHT + COMPARAÇÃO — LADO A LADO */}
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                      {/* BLOCO DE INSIGHT (menor) */}
-                      <div className="md:col-span-2 rounded-2xl border bg-white p-5 shadow-sm flex flex-col">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Lightbulb className="h-4 w-4 text-gold" />
-                          <p className="text-sm font-semibold text-blue-deep">O que impacta seu resultado?</p>
-                        </div>
-                        <ul className="space-y-2 text-xs text-muted-foreground">
-                          <li className="flex items-start gap-2">
-                            <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
-                            Parte do crescimento vem dos juros ao longo do tempo
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
-                            Quanto maior o prazo, maior o impacto dos juros compostos
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
-                            Aumentar o aporte mensal acelera significativamente o resultado
-                          </li>
-                        </ul>
-                      </div>
-
-                      {/* COMPARAÇÃO COM POUPANÇA (maior) */}
-                      {comparacaoPoupanca && (
-                        <div className="md:col-span-3 rounded-2xl border bg-white p-5 shadow-sm flex flex-col">
-                          <div className="flex items-center gap-2 mb-2">
-                            <PiggyBank className="h-4 w-4 text-blue-medium" />
-                            <p className="text-sm font-semibold text-blue-deep">Comparação com poupança</p>
-                          </div>
-                          <p className="text-xs text-muted-foreground mb-3">Taxa considerada para poupança: 6% ao ano</p>
-
-                          {modo === "objetivo" ? (
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <div className="rounded-xl bg-[#F5F7F6] p-3">
-                                <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
-                                <p className="text-lg font-bold text-blue-deep tabular-nums">
-                                  {resultado.metaAtingida ? formatTempo(resultado.meses) : "—"}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-0.5">a {taxa}% ao ano</p>
-                              </div>
-                              <div className="rounded-xl bg-[#F5F7F6] p-3">
-                                <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
-                                <p className="text-lg font-bold text-blue-deep tabular-nums">
-                                  {comparacaoPoupanca.metaAtingidaPoupanca
-                                    ? formatTempo(comparacaoPoupanca.tempoPoupanca!)
-                                    : "Meta não atingida"}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-0.5">a 6% ao ano</p>
-                              </div>
-                              {comparacaoPoupanca.diferencaMeses != null && comparacaoPoupanca.diferencaMeses > 0 && (
-                                <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-3 text-center">
-                                  <p className="text-sm font-semibold text-blue-deep">
-                                    Você alcança sua meta{" "}
-                                    <span className="text-gold font-bold">
-                                      {formatTempo(comparacaoPoupanca.diferencaMeses)}
-                                    </span>{" "}
-                                    mais rápido do que na poupança
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <div className="rounded-xl bg-[#F5F7F6] p-3">
-                                <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
-                                <p className="text-lg font-bold text-blue-deep tabular-nums">
-                                  {formatMoney(comparacaoPoupanca.valorSimulado!)}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-0.5">a {taxa}% ao ano</p>
-                              </div>
-                              <div className="rounded-xl bg-[#F5F7F6] p-3">
-                                <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
-                                <p className="text-lg font-bold text-blue-deep tabular-nums">
-                                  {formatMoney(comparacaoPoupanca.valorPoupanca!)}
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-0.5">a 6% ao ano</p>
-                              </div>
-                              {comparacaoPoupanca.diferenca! > 0 && (
-                                <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-3 text-center">
-                                  <p className="text-sm font-semibold text-blue-deep">
-                                    Você teria aproximadamente{" "}
-                                    <span className="text-gold font-bold">
-                                      {formatMoney(comparacaoPoupanca.diferenca!)}
-                                    </span>{" "}
-                                    a menos na poupança
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
                   </>
                 ) : (
                   <div className="rounded-2xl border bg-white p-8 text-center text-muted-foreground">
@@ -491,6 +396,106 @@ export default function Simulador() {
               </div>
             </ScrollReveal>
           </div>
+
+          {/* INSIGHT + COMPARAÇÃO — FULL WIDTH */}
+          {!hasErrors && resultado && (
+            <ScrollReveal delay={180}>
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-6">
+                {/* BLOCO DE INSIGHT (40%) */}
+                <div className="md:col-span-2 rounded-2xl border bg-white p-8 shadow-sm flex flex-col">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Lightbulb className="h-5 w-5 text-gold" />
+                    <p className="text-base font-semibold text-blue-deep">O que impacta seu resultado?</p>
+                  </div>
+                  <ul className="space-y-3 text-sm text-muted-foreground flex-1">
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
+                      Parte do crescimento vem dos juros ao longo do tempo
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
+                      Quanto maior o prazo, maior o impacto dos juros compostos
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
+                      Aumentar o aporte mensal acelera significativamente o resultado
+                    </li>
+                  </ul>
+                </div>
+
+                {/* COMPARAÇÃO COM POUPANÇA (60%) */}
+                {comparacaoPoupanca && (
+                  <div className="md:col-span-3 rounded-2xl border bg-white p-8 shadow-sm flex flex-col">
+                    <div className="flex items-center gap-2 mb-3">
+                      <PiggyBank className="h-5 w-5 text-blue-medium" />
+                      <p className="text-base font-semibold text-blue-deep">Comparação com poupança</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-4">Taxa considerada para poupança: 6% ao ano</p>
+
+                    {modo === "objetivo" ? (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-xl bg-[#F5F7F6] p-4">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
+                          <p className="text-xl font-bold text-blue-deep tabular-nums">
+                            {resultado.metaAtingida ? formatTempo(resultado.meses) : "—"}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">a {taxa}% ao ano</p>
+                        </div>
+                        <div className="rounded-xl bg-[#F5F7F6] p-4">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
+                          <p className="text-xl font-bold text-blue-deep tabular-nums">
+                            {comparacaoPoupanca.metaAtingidaPoupanca
+                              ? formatTempo(comparacaoPoupanca.tempoPoupanca!)
+                              : "Meta não atingida"}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">a 6% ao ano</p>
+                        </div>
+                        {comparacaoPoupanca.diferencaMeses != null && comparacaoPoupanca.diferencaMeses > 0 && (
+                          <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
+                            <p className="text-sm font-semibold text-blue-deep">
+                              Você alcança sua meta{" "}
+                              <span className="text-gold font-bold">
+                                {formatTempo(comparacaoPoupanca.diferencaMeses)}
+                              </span>{" "}
+                              mais rápido do que na poupança
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-xl bg-[#F5F7F6] p-4">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
+                          <p className="text-xl font-bold text-blue-deep tabular-nums">
+                            {formatMoney(comparacaoPoupanca.valorSimulado!)}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">a {taxa}% ao ano</p>
+                        </div>
+                        <div className="rounded-xl bg-[#F5F7F6] p-4">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
+                          <p className="text-xl font-bold text-blue-deep tabular-nums">
+                            {formatMoney(comparacaoPoupanca.valorPoupanca!)}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">a 6% ao ano</p>
+                        </div>
+                        {comparacaoPoupanca.diferenca! > 0 && (
+                          <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
+                            <p className="text-sm font-semibold text-blue-deep">
+                              Você teria aproximadamente{" "}
+                              <span className="text-gold font-bold">
+                                {formatMoney(comparacaoPoupanca.diferenca!)}
+                              </span>{" "}
+                              a menos na poupança
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </ScrollReveal>
+          )}
         </div>
       </section>
       <Footer />
