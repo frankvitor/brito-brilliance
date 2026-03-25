@@ -24,9 +24,17 @@ interface Resultado {
 }
 
 function simularPorObjetivo(inicial: number, aporte: number, taxaAnual: number, meta: number): Resultado {
-  if (meta <= 0) return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: false };
+  if (meta <= 0)
+    return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: false };
   if (inicial >= meta) {
-    return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [{ mes: 0, valor: Math.round(inicial), investido: Math.round(inicial) }], metaAtingida: true };
+    return {
+      meses: 0,
+      acumulado: inicial,
+      investido: inicial,
+      rendimentos: 0,
+      dados: [{ mes: 0, valor: Math.round(inicial), investido: Math.round(inicial) }],
+      metaAtingida: true,
+    };
   }
 
   const taxaMensal = taxaAnual > 0 ? Math.pow(1 + taxaAnual / 100, 1 / 12) - 1 : 0;
@@ -54,7 +62,8 @@ function simularPorObjetivo(inicial: number, aporte: number, taxaAnual: number, 
 }
 
 function simularPorPrazo(inicial: number, aporte: number, taxaAnual: number, prazoAnos: number): Resultado {
-  if (prazoAnos <= 0) return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: true };
+  if (prazoAnos <= 0)
+    return { meses: 0, acumulado: inicial, investido: inicial, rendimentos: 0, dados: [], metaAtingida: true };
 
   const taxaMensal = taxaAnual > 0 ? Math.pow(1 + taxaAnual / 100, 1 / 12) - 1 : 0;
   let acumulado = inicial;
@@ -158,9 +167,7 @@ export default function Simulador() {
         <div className="container-site">
           <ScrollReveal>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold">Ferramenta</p>
-            <h1 className="text-4xl font-extrabold text-blue-deep md:text-5xl">
-              Simulador Financeiro
-            </h1>
+            <h1 className="text-4xl font-extrabold text-blue-deep md:text-5xl">Simulador Financeiro</h1>
             <p className="mt-3 max-w-xl text-muted-foreground">
               {modo === "objetivo"
                 ? "Descubra quanto tempo levará para atingir seu objetivo financeiro."
@@ -179,9 +186,7 @@ export default function Simulador() {
                       key={m}
                       onClick={() => setModo(m)}
                       className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all ${
-                        modo === m
-                          ? "bg-blue-deep text-white shadow-sm"
-                          : "text-blue-deep/60 hover:text-blue-deep"
+                        modo === m ? "bg-blue-deep text-white shadow-sm" : "text-blue-deep/60 hover:text-blue-deep"
                       }`}
                     >
                       {m === "objetivo" ? "Por objetivo" : "Por prazo"}
@@ -260,9 +265,7 @@ export default function Simulador() {
                     placeholder="12"
                   />
                   {errors.taxa && <p className="mt-1 text-xs text-red-500">{errors.taxa}</p>}
-                  <p className="mt-1.5 text-xs text-muted-foreground">
-                    Exemplo: 8% ao ano, 10% ao ano, 12% ao ano
-                  </p>
+                  <p className="mt-1.5 text-xs text-muted-foreground">Exemplo: 8% ao ano, 10% ao ano, 12% ao ano</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -290,7 +293,8 @@ export default function Simulador() {
                           </p>
                           {!resultado.metaAtingida && (
                             <p className="mt-2 text-sm text-white/50">
-                              Com os parâmetros informados, não foi possível atingir a meta dentro do limite da simulação.
+                              Com os parâmetros informados, não foi possível atingir a meta dentro do limite da
+                              simulação.
                             </p>
                           )}
                         </>
@@ -319,7 +323,9 @@ export default function Simulador() {
                         </div>
                         <div>
                           <p className="text-xs text-white/50">Rendimentos</p>
-                          <p className="text-lg font-bold text-gold tabular-nums">{formatMoney(resultado.rendimentos)}</p>
+                          <p className="text-lg font-bold text-gold tabular-nums">
+                            {formatMoney(resultado.rendimentos)}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -361,8 +367,20 @@ export default function Simulador() {
                                 labelFormatter={(label) => `Mês ${label}`}
                                 contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }}
                               />
-                              <Area type="monotone" dataKey="investido" stroke="#0A2540" strokeWidth={2} fill="url(#gradInv)" />
-                              <Area type="monotone" dataKey="valor" stroke="#C9A227" strokeWidth={2} fill="url(#gradVal)" />
+                              <Area
+                                type="monotone"
+                                dataKey="investido"
+                                stroke="#0A2540"
+                                strokeWidth={2}
+                                fill="url(#gradInv)"
+                              />
+                              <Area
+                                type="monotone"
+                                dataKey="valor"
+                                stroke="#C9A227"
+                                strokeWidth={2}
+                                fill="url(#gradVal)"
+                              />
                             </AreaChart>
                           </ResponsiveContainer>
                         </div>
@@ -422,7 +440,9 @@ export default function Simulador() {
                               <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
                                 <p className="text-sm font-semibold text-blue-deep">
                                   Você alcançaria sua meta{" "}
-                                  <span className="text-gold font-bold">{formatTempo(comparacaoPoupanca.diferencaMeses)}</span>{" "}
+                                  <span className="text-gold font-bold">
+                                    {formatTempo(comparacaoPoupanca.diferencaMeses)}
+                                  </span>{" "}
                                   mais rápido do que na poupança
                                 </p>
                               </div>
@@ -448,7 +468,9 @@ export default function Simulador() {
                               <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
                                 <p className="text-sm font-semibold text-blue-deep">
                                   Você teria aproximadamente{" "}
-                                  <span className="text-gold font-bold">{formatMoney(comparacaoPoupanca.diferenca!)}</span>{" "}
+                                  <span className="text-gold font-bold">
+                                    {formatMoney(comparacaoPoupanca.diferenca!)}
+                                  </span>{" "}
                                   a menos na poupança
                                 </p>
                               </div>
@@ -466,12 +488,6 @@ export default function Simulador() {
               </div>
             </ScrollReveal>
           </div>
-
-          <ScrollReveal>
-            <p className="mt-10 text-center text-xs text-muted-foreground">
-              Simulação ilustrativa, não constitui recomendação financeira.
-            </p>
-          </ScrollReveal>
         </div>
       </section>
       <Footer />
