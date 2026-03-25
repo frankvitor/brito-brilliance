@@ -398,7 +398,7 @@ export default function Simulador() {
           </div>
 
           {/* INSIGHT + COMPARAÇÃO — FULL WIDTH */}
-          {!hasErrors && resultado && (
+          {resultado && (
             <ScrollReveal delay={180}>
               <div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-6">
                 {/* BLOCO DE INSIGHT (40%) */}
