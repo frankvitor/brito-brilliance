@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Eye, GitCompareArrows, Lightbulb, ArrowRight, Target, MessageCircle, User, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-consultant.jpg";
-import heroMobileImage from "@/assets/hero-mobile.png";
+
 
 export default function Index() {
   return (
@@ -20,12 +20,7 @@ export default function Index() {
           alt="Consultor financeiro profissional"
           width={1920}
           height={1080}
-          className="absolute inset-0 h-full w-full object-cover object-top hidden md:block"
-        />
-        <img
-          src={heroMobileImage}
-          alt="Consultor financeiro profissional"
-          className="absolute inset-0 h-full w-full object-cover object-center block md:hidden"
+          className="absolute inset-0 h-full w-full object-cover object-center md:object-top"
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--blue-deep))/0.92] via-[hsl(var(--blue-deep))/0.78] to-[hsl(var(--blue-deep))/0.45]" />
