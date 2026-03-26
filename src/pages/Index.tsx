@@ -13,7 +13,7 @@ export default function Index() {
       <Navbar />
 
       {/* ══════════ HERO ══════════ */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[75vh] flex items-center overflow-hidden mt-20 md:mt-24 rounded-t-2xl">
         {/* Background image */}
         <img
           src={heroImage}
