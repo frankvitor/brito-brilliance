@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Eye, GitCompareArrows, Lightbulb, ArrowRight, Target, MessageCircle, User, Sparkles } from "lucide-react";
+import heroImage from "@/assets/hero-consultant.jpg";
 
 export default function Index() {
   return (
@@ -11,28 +12,37 @@ export default function Index() {
       <Navbar />
 
       {/* ══════════ HERO ══════════ */}
-      <section className="pt-28 pb-16 md:pt-40 md:pb-24">
-        <div className="container-site">
-          <div className="mx-auto max-w-3xl text-center">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        {/* Background image */}
+        <img
+          src={heroImage}
+          alt="Consultor financeiro profissional"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover object-top"
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--blue-deep))/0.92] via-[hsl(var(--blue-deep))/0.78] to-[hsl(var(--blue-deep))/0.45]" />
+
+        {/* Content */}
+        <div className="container-site relative z-10 py-28 md:py-36">
+          <div className="max-w-2xl">
             <ScrollReveal>
-              <span className="inline-block rounded-full border border-gold/30 bg-gold/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-gold">
-                Consultoria financeira estratégica
+              <span className="inline-block rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-gold">
+                Planejamento financeiro estratégico
               </span>
-              <h1 className="mt-6 text-[2.25rem] font-extrabold leading-[1.08] tracking-tight text-blue-deep md:text-[2.75rem] lg:text-[3.5rem]">
-                Planeje seu futuro financeiro com clareza e estratégia
+              <h1 className="mt-7 text-[2.25rem] font-extrabold leading-[1.08] tracking-tight text-white md:text-[2.75rem] lg:text-[3.75rem]">
+                Transforme seus objetivos financeiros em um plano claro
               </h1>
-              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 md:text-lg">
                 Entenda quanto investir, por quanto tempo e qual estratégia seguir para alcançar seus objetivos.
               </p>
-              <div className="mt-9 flex flex-wrap justify-center gap-4">
-                <Button variant="gold" size="lg" asChild>
-                  <Link to="/simulador">Simular agora</Link>
-                </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">
-                    <MessageCircle size={18} className="mr-1" />
-                    Falar com consultor
-                  </a>
+              <div className="mt-10">
+                <Button variant="gold" size="lg" className="text-base px-10 py-3 h-auto" asChild>
+                  <Link to="/simulador">
+                    Simular agora
+                    <ArrowRight size={18} className="ml-1" />
+                  </Link>
                 </Button>
               </div>
             </ScrollReveal>
