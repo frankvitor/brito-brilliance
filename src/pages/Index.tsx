@@ -19,7 +19,7 @@ export default function Index() {
           alt="Consultor financeiro profissional"
           width={1920}
           height={1080}
-          className="absolute inset-0 h-full w-full object-cover object-top"
+          className="absolute inset-0 h-full w-full object-cover object-top md:object-top max-md:object-center"
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--blue-deep))/0.92] via-[hsl(var(--blue-deep))/0.78] to-[hsl(var(--blue-deep))/0.45]" />
