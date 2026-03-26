@@ -316,70 +316,89 @@ export default function Simulador() {
             </ScrollReveal>
           </div>
 
-          {/* ROW 2: INSIGHT + COMPARAÇÃO — mesma largura */}
+          {/* ROW 2: 3 CARDS — DARK SECTION */}
           {resultado && (
-            <ScrollReveal delay={180}>
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="md:col-span-2 rounded-2xl border bg-white p-6 md:p-8 shadow-sm flex flex-col">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Lightbulb className="h-5 w-5 text-gold" />
-                    <p className="text-base font-semibold text-blue-deep">O que impacta seu resultado?</p>
-                  </div>
-                  <ul className="space-y-3 text-sm text-muted-foreground flex-1">
-                    <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Parte do crescimento vem dos juros ao longo do tempo</li>
-                    <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Quanto maior o prazo, maior o impacto dos juros compostos</li>
-                    <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Aumentar o aporte mensal acelera significativamente o resultado</li>
-                  </ul>
-                </div>
-
-                {comparacaoPoupanca && (
-                  <div className="md:col-span-3 rounded-2xl border bg-white p-6 md:p-8 shadow-sm flex flex-col">
-                    <div className="flex items-center gap-2 mb-3">
-                      <PiggyBank className="h-5 w-5 text-blue-medium" />
-                      <p className="text-base font-semibold text-blue-deep">Comparação com poupança</p>
+            <div className="mt-8 rounded-2xl bg-blue-deep p-6 md:p-10">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {/* Card 1 — Impacto */}
+                <ScrollReveal>
+                  <div className="rounded-xl border border-white/8 bg-white/[0.04] px-7 py-8 backdrop-blur-sm h-full flex flex-col">
+                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-gold/15 text-gold">
+                      <Lightbulb size={22} strokeWidth={2} />
                     </div>
-                    <p className="text-xs text-muted-foreground mb-4">Taxa considerada para poupança: 6% ao ano</p>
-                    {modo === "objetivo" ? (
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-xl bg-[#F5F7F6] p-4">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
-                          <p className="text-xl font-bold text-blue-deep tabular-nums">{resultado.metaAtingida ? formatTempo(resultado.meses) : "—"}</p>
-                          <p className="text-xs text-muted-foreground mt-1">a {taxa}% ao ano</p>
-                        </div>
-                        <div className="rounded-xl bg-[#F5F7F6] p-4">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
-                          <p className="text-xl font-bold text-blue-deep tabular-nums">{comparacaoPoupanca.metaAtingidaPoupanca ? formatTempo(comparacaoPoupanca.tempoPoupanca!) : "Meta não atingida"}</p>
-                          <p className="text-xs text-muted-foreground mt-1">a 6% ao ano</p>
-                        </div>
-                        {comparacaoPoupanca.diferencaMeses != null && comparacaoPoupanca.diferencaMeses > 0 && (
-                          <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
-                            <p className="text-sm font-semibold text-blue-deep">Você alcança sua meta <span className="text-gold font-bold">{formatTempo(comparacaoPoupanca.diferencaMeses)}</span> mais rápido do que na poupança</p>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-xl bg-[#F5F7F6] p-4">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Sua simulação</p>
-                          <p className="text-xl font-bold text-blue-deep tabular-nums">{formatMoney(comparacaoPoupanca.valorSimulado!)}</p>
-                          <p className="text-xs text-muted-foreground mt-1">a {taxa}% ao ano</p>
-                        </div>
-                        <div className="rounded-xl bg-[#F5F7F6] p-4">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Na poupança</p>
-                          <p className="text-xl font-bold text-blue-deep tabular-nums">{formatMoney(comparacaoPoupanca.valorPoupanca!)}</p>
-                          <p className="text-xs text-muted-foreground mt-1">a 6% ao ano</p>
-                        </div>
-                        {comparacaoPoupanca.diferenca! > 0 && (
-                          <div className="sm:col-span-2 rounded-xl bg-gold/10 border border-gold/20 p-4 text-center">
-                            <p className="text-sm font-semibold text-blue-deep">Você teria aproximadamente <span className="text-gold font-bold">{formatMoney(comparacaoPoupanca.diferenca!)}</span> a menos na poupança</p>
-                          </div>
+                    <h3 className="text-lg font-bold text-white">O que impacta seu resultado?</h3>
+                    <ul className="mt-4 space-y-3 text-sm text-white/55 flex-1">
+                      <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Parte do crescimento vem dos juros ao longo do tempo</li>
+                      <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Quanto maior o prazo, maior o impacto dos juros compostos</li>
+                      <li className="flex items-start gap-2"><span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />Aumentar o aporte mensal acelera significativamente o resultado</li>
+                    </ul>
+                  </div>
+                </ScrollReveal>
+
+                {/* Card 2 — Comparação (destaque) */}
+                <ScrollReveal delay={90}>
+                  <div className="rounded-xl border border-gold/20 bg-gold/[0.08] px-7 py-8 backdrop-blur-sm h-full flex flex-col">
+                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-gold/15 text-gold">
+                      <PiggyBank size={22} strokeWidth={2} />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Comparação com poupança</h3>
+                    <p className="mt-1 text-xs text-white/40">Taxa considerada: 6% ao ano</p>
+
+                    {comparacaoPoupanca && (
+                      <div className="mt-4 space-y-3 flex-1 flex flex-col justify-center">
+                        {modo === "objetivo" ? (
+                          <>
+                            <div className="flex items-center justify-between rounded-lg bg-white/[0.06] px-4 py-3">
+                              <span className="text-sm text-white/60">Sua simulação</span>
+                              <span className="text-sm font-bold tabular-nums text-white">{resultado.metaAtingida ? formatTempo(resultado.meses) : "—"}</span>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg bg-white/[0.06] px-4 py-3">
+                              <span className="text-sm text-white/60">Poupança</span>
+                              <span className="text-sm font-bold tabular-nums text-white">{comparacaoPoupanca.metaAtingidaPoupanca ? formatTempo(comparacaoPoupanca.tempoPoupanca!) : "Não atinge"}</span>
+                            </div>
+                            {comparacaoPoupanca.diferencaMeses != null && comparacaoPoupanca.diferencaMeses > 0 && (
+                              <div className="rounded-lg bg-gold/15 border border-gold/25 px-4 py-3 text-center">
+                                <p className="text-sm font-semibold text-white">Você alcança sua meta <span className="text-gold font-bold">{formatTempo(comparacaoPoupanca.diferencaMeses)}</span> mais rápido</p>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between rounded-lg bg-white/[0.06] px-4 py-3">
+                              <span className="text-sm text-white/60">Sua simulação</span>
+                              <span className="text-sm font-bold tabular-nums text-white">{formatMoney(comparacaoPoupanca.valorSimulado!)}</span>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg bg-white/[0.06] px-4 py-3">
+                              <span className="text-sm text-white/60">Poupança</span>
+                              <span className="text-sm font-bold tabular-nums text-white">{formatMoney(comparacaoPoupanca.valorPoupanca!)}</span>
+                            </div>
+                            {comparacaoPoupanca.diferenca! > 0 && (
+                              <div className="rounded-lg bg-gold/15 border border-gold/25 px-4 py-3 text-center">
+                                <p className="text-sm font-semibold text-white">Diferença de <span className="text-gold font-bold">{formatMoney(comparacaoPoupanca.diferenca!)}</span> a mais que na poupança</p>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
                     )}
                   </div>
-                )}
+                </ScrollReveal>
+
+                {/* Card 3 — Educação */}
+                <ScrollReveal delay={180}>
+                  <div className="rounded-xl border border-white/8 bg-white/[0.04] px-7 py-8 backdrop-blur-sm h-full flex flex-col">
+                    <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-gold/15 text-gold">
+                      <Clock size={22} strokeWidth={2} />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">O poder do tempo no investimento</h3>
+                    <p className="mt-4 text-sm leading-relaxed text-white/55 flex-1">
+                      Consistência ao longo do tempo é o principal fator de crescimento patrimonial.
+                      Mesmo aportes menores, quando mantidos com disciplina, podem gerar resultados expressivos.
+                    </p>
+                  </div>
+                </ScrollReveal>
               </div>
-            </ScrollReveal>
+            </div>
           )}
 
           <p className="mt-8 text-center text-xs text-muted-foreground/60">
