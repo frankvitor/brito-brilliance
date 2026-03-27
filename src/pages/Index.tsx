@@ -20,10 +20,10 @@ export default function Index() {
           alt="Consultor financeiro profissional"
           width={1920}
           height={1080}
-          className="absolute inset-0 h-full w-full object-cover object-center md:object-top"
+          className="absolute inset-0 h-full w-full object-cover object-[70%_center] md:object-[65%_20%] scale-[1.02] brightness-90 contrast-[1.05]"
         />
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--blue-deep))/0.92] via-[hsl(var(--blue-deep))/0.78] to-[hsl(var(--blue-deep))/0.45]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(210,72%,15%)]/90 via-[hsl(210,72%,15%)]/75 to-[hsl(210,72%,15%)]/40" />
 
         {/* Content */}
         <div className="container-site relative z-10 py-28 md:py-36">
