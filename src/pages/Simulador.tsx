@@ -110,9 +110,11 @@ export default function Simulador() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const normalizeNumeric = (value: string) => value.replace(",", ".");
+
   const validateField = (name: string, value: string): string => {
     if (value.trim() === "") return "Este campo é obrigatório.";
-    const num = Number(value);
+    const num = Number(normalizeNumeric(value));
     if (isNaN(num)) return "Digite um valor válido.";
     if (num < 0) return "O valor deve ser positivo.";
     if ((name === "objetivo" || name === "prazo") && num <= 0) return "Deve ser maior que zero.";
@@ -134,12 +136,12 @@ export default function Simulador() {
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return null;
-    const nInicial = Number(inicial);
-    const nAporte = Number(aporte);
-    const nTaxa = Number(taxa);
+    const nInicial = Number(normalizeNumeric(inicial));
+    const nAporte = Number(normalizeNumeric(aporte));
+    const nTaxa = Number(normalizeNumeric(taxa));
     return modo === "objetivo"
-      ? simularPorObjetivo(nInicial, nAporte, nTaxa, Number(objetivo))
-      : simularPorPrazo(nInicial, nAporte, nTaxa, Number(prazo));
+      ? simularPorObjetivo(nInicial, nAporte, nTaxa, Number(normalizeNumeric(objetivo)))
+      : simularPorPrazo(nInicial, nAporte, nTaxa, Number(normalizeNumeric(prazo)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inicial, aporte, taxa, objetivo, prazo, modo]);
 
@@ -147,15 +149,14 @@ export default function Simulador() {
     if (!resultado || !resultado.metaAtingida) return null;
     const TAXA_POUPANCA = 6;
     if (modo === "objetivo") {
-      const resPoupanca = simularPorObjetivo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(objetivo));
+      const resPoupanca = simularPorObjetivo(Number(normalizeNumeric(inicial)), Number(normalizeNumeric(aporte)), TAXA_POUPANCA, Number(normalizeNumeric(objetivo)));
       return {
         tempoPoupanca: resPoupanca.meses,
-        tempoSimulado: resultado.meses,
-        metaAtingidaPoupanca: resPoupanca.metaAtingida,
-        diferencaMeses: resPoupanca.metaAtingida ? resPoupanca.meses - resultado.meses : null,
+        tempoInvestimento: resultado.meses,
+        diferencaMeses: resPoupanca.meses - resultado.meses,
       };
     } else {
-      const resPoupanca = simularPorPrazo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(prazo));
+      const resPoupanca = simularPorPrazo(Number(normalizeNumeric(inicial)), Number(normalizeNumeric(aporte)), TAXA_POUPANCA, Number(normalizeNumeric(prazo)));
       return {
         valorPoupanca: resPoupanca.acumulado,
         valorSimulado: resultado.acumulado,
