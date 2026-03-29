@@ -212,7 +212,7 @@ export default function Simulador() {
                       <TrendingUp className="h-4 w-4 text-gold" />
                       Valor que você quer alcançar (R$)
                     </label>
-                    <Input type="number" min={1} value={objetivo} onChange={handleChange("objetivo", setObjetivo)} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="text" inputMode="decimal" value={objetivo} onChange={handleChange("objetivo", setObjetivo)} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.objetivo && <p className="mt-1 text-xs text-red-500">{errors.objetivo}</p>}
                   </div>
                 ) : (
@@ -221,24 +221,24 @@ export default function Simulador() {
                       <Clock className="h-4 w-4 text-gold" />
                       Prazo de investimento (anos)
                     </label>
-                    <Input type="number" min={1} step={1} value={prazo} onChange={handleChange("prazo", setPrazo)} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="text" inputMode="decimal" value={prazo} onChange={handleChange("prazo", setPrazo)} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.prazo && <p className="mt-1 text-xs text-red-500">{errors.prazo}</p>}
                   </div>
                 )}
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Valor inicial (R$)</label>
-                  <Input type="number" min={0} value={inicial} onChange={handleChange("inicial", setInicial)} placeholder="10000" />
+                  <Input type="text" inputMode="decimal" value={inicial} onChange={handleChange("inicial", setInicial)} placeholder="10000" />
                   {errors.inicial && <p className="mt-1 text-xs text-red-500">{errors.inicial}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Aporte mensal (R$)</label>
-                  <Input type="number" min={0} value={aporte} onChange={handleChange("aporte", setAporte)} placeholder="2000" />
+                  <Input type="text" inputMode="decimal" value={aporte} onChange={handleChange("aporte", setAporte)} placeholder="2000" />
                   {errors.aporte && <p className="mt-1 text-xs text-red-500">{errors.aporte}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Taxa (% ao ano)</label>
-                  <Input type="number" min={0} step={0.5} value={taxa} onChange={handleChange("taxa", setTaxa)} placeholder="12" />
+                  <Input type="text" inputMode="decimal" value={taxa} onChange={handleChange("taxa", setTaxa)} placeholder="12" />
                   {errors.taxa && <p className="mt-1 text-xs text-red-500">{errors.taxa}</p>}
                   <p className="mt-1.5 text-xs text-muted-foreground">Exemplo: 8% ao ano, 10% ao ano, 12% ao ano</p>
                 </div>
