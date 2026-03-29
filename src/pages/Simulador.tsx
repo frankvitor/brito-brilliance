@@ -102,31 +102,44 @@ function formatTempo(meses: number) {
 
 export default function Simulador() {
   const [modo, setModo] = useState<Modo>("objetivo");
-  const [inicial, setInicial] = useState(10000);
-  const [aporte, setAporte] = useState(2000);
-  const [taxa, setTaxa] = useState(12);
-  const [objetivo, setObjetivo] = useState(1000000);
-  const [prazo, setPrazo] = useState(20);
+  const [inicial, setInicial] = useState("10000");
+  const [aporte, setAporte] = useState("2000");
+  const [taxa, setTaxa] = useState("12");
+  const [objetivo, setObjetivo] = useState("1000000");
+  const [prazo, setPrazo] = useState("20");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (inicial < 0) e.inicial = "Não pode ser negativo";
-    if (aporte < 0) e.aporte = "Não pode ser negativo";
-    if (taxa < 0) e.taxa = "Não pode ser negativa";
-    if (modo === "objetivo" && objetivo <= 0) e.objetivo = "Deve ser maior que zero";
-    if (modo === "prazo" && prazo <= 0) e.prazo = "Deve ser maior que zero";
-    return e;
+  const validateField = (name: string, value: string): string => {
+    if (value.trim() === "") return "Este campo é obrigatório.";
+    const num = Number(value);
+    if (isNaN(num)) return "Digite um valor válido.";
+    if (num < 0) return "O valor deve ser positivo.";
+    if ((name === "objetivo" || name === "prazo") && num <= 0) return "Deve ser maior que zero.";
+    return "";
+  };
+
+  const handleChange = (name: string, setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setter(value);
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const resultado = useMemo(() => {
-    const e = validate();
-    setErrors(e);
-    if (Object.keys(e).length > 0) return null;
+    const fields: Record<string, string> = { inicial, aporte, taxa, ...(modo === "objetivo" ? { objetivo } : { prazo }) };
+    const newErrors: Record<string, string> = {};
+    for (const [key, val] of Object.entries(fields)) {
+      const err = validateField(key, val);
+      if (err) newErrors[key] = err;
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return null;
+    const nInicial = Number(inicial);
+    const nAporte = Number(aporte);
+    const nTaxa = Number(taxa);
     return modo === "objetivo"
-      ? simularPorObjetivo(inicial, aporte, taxa, objetivo)
-      : simularPorPrazo(inicial, aporte, taxa, prazo);
+      ? simularPorObjetivo(nInicial, nAporte, nTaxa, Number(objetivo))
+      : simularPorPrazo(nInicial, nAporte, nTaxa, Number(prazo));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inicial, aporte, taxa, objetivo, prazo, modo]);
 
@@ -134,7 +147,7 @@ export default function Simulador() {
     if (!resultado || !resultado.metaAtingida) return null;
     const TAXA_POUPANCA = 6;
     if (modo === "objetivo") {
-      const resPoupanca = simularPorObjetivo(inicial, aporte, TAXA_POUPANCA, objetivo);
+      const resPoupanca = simularPorObjetivo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(objetivo));
       return {
         tempoPoupanca: resPoupanca.meses,
         tempoSimulado: resultado.meses,
@@ -142,7 +155,7 @@ export default function Simulador() {
         diferencaMeses: resPoupanca.metaAtingida ? resPoupanca.meses - resultado.meses : null,
       };
     } else {
-      const resPoupanca = simularPorPrazo(inicial, aporte, TAXA_POUPANCA, prazo);
+      const resPoupanca = simularPorPrazo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(prazo));
       return {
         valorPoupanca: resPoupanca.acumulado,
         valorSimulado: resultado.acumulado,
@@ -199,7 +212,7 @@ export default function Simulador() {
                       <TrendingUp className="h-4 w-4 text-gold" />
                       Valor que você quer alcançar (R$)
                     </label>
-                    <Input type="number" min={1} value={objetivo} onChange={(e) => setObjetivo(Number(e.target.value))} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="number" min={1} value={objetivo} onChange={handleChange("objetivo", setObjetivo)} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.objetivo && <p className="mt-1 text-xs text-red-500">{errors.objetivo}</p>}
                   </div>
                 ) : (
@@ -208,24 +221,24 @@ export default function Simulador() {
                       <Clock className="h-4 w-4 text-gold" />
                       Prazo de investimento (anos)
                     </label>
-                    <Input type="number" min={1} step={1} value={prazo} onChange={(e) => setPrazo(Number(e.target.value))} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="number" min={1} step={1} value={prazo} onChange={handleChange("prazo", setPrazo)} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.prazo && <p className="mt-1 text-xs text-red-500">{errors.prazo}</p>}
                   </div>
                 )}
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Valor inicial (R$)</label>
-                  <Input type="number" min={0} value={inicial} onChange={(e) => setInicial(Number(e.target.value))} placeholder="10000" />
+                  <Input type="number" min={0} value={inicial} onChange={handleChange("inicial", setInicial)} placeholder="10000" />
                   {errors.inicial && <p className="mt-1 text-xs text-red-500">{errors.inicial}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Aporte mensal (R$)</label>
-                  <Input type="number" min={0} value={aporte} onChange={(e) => setAporte(Number(e.target.value))} placeholder="2000" />
+                  <Input type="number" min={0} value={aporte} onChange={handleChange("aporte", setAporte)} placeholder="2000" />
                   {errors.aporte && <p className="mt-1 text-xs text-red-500">{errors.aporte}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Taxa (% ao ano)</label>
-                  <Input type="number" min={0} step={0.5} value={taxa} onChange={(e) => setTaxa(Number(e.target.value))} placeholder="12" />
+                  <Input type="number" min={0} step={0.5} value={taxa} onChange={handleChange("taxa", setTaxa)} placeholder="12" />
                   {errors.taxa && <p className="mt-1 text-xs text-red-500">{errors.taxa}</p>}
                   <p className="mt-1.5 text-xs text-muted-foreground">Exemplo: 8% ao ano, 10% ao ano, 12% ao ano</p>
                 </div>
