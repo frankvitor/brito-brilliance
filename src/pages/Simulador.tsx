@@ -102,31 +102,44 @@ function formatTempo(meses: number) {
 
 export default function Simulador() {
   const [modo, setModo] = useState<Modo>("objetivo");
-  const [inicial, setInicial] = useState(10000);
-  const [aporte, setAporte] = useState(2000);
-  const [taxa, setTaxa] = useState(12);
-  const [objetivo, setObjetivo] = useState(1000000);
-  const [prazo, setPrazo] = useState(20);
+  const [inicial, setInicial] = useState("10000");
+  const [aporte, setAporte] = useState("2000");
+  const [taxa, setTaxa] = useState("12");
+  const [objetivo, setObjetivo] = useState("1000000");
+  const [prazo, setPrazo] = useState("20");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (inicial < 0) e.inicial = "Não pode ser negativo";
-    if (aporte < 0) e.aporte = "Não pode ser negativo";
-    if (taxa < 0) e.taxa = "Não pode ser negativa";
-    if (modo === "objetivo" && objetivo <= 0) e.objetivo = "Deve ser maior que zero";
-    if (modo === "prazo" && prazo <= 0) e.prazo = "Deve ser maior que zero";
-    return e;
+  const validateField = (name: string, value: string): string => {
+    if (value.trim() === "") return "Este campo é obrigatório.";
+    const num = Number(value);
+    if (isNaN(num)) return "Digite um valor válido.";
+    if (num < 0) return "O valor deve ser positivo.";
+    if ((name === "objetivo" || name === "prazo") && num <= 0) return "Deve ser maior que zero.";
+    return "";
+  };
+
+  const handleChange = (name: string, setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setter(value);
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const resultado = useMemo(() => {
-    const e = validate();
-    setErrors(e);
-    if (Object.keys(e).length > 0) return null;
+    const fields: Record<string, string> = { inicial, aporte, taxa, ...(modo === "objetivo" ? { objetivo } : { prazo }) };
+    const newErrors: Record<string, string> = {};
+    for (const [key, val] of Object.entries(fields)) {
+      const err = validateField(key, val);
+      if (err) newErrors[key] = err;
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return null;
+    const nInicial = Number(inicial);
+    const nAporte = Number(aporte);
+    const nTaxa = Number(taxa);
     return modo === "objetivo"
-      ? simularPorObjetivo(inicial, aporte, taxa, objetivo)
-      : simularPorPrazo(inicial, aporte, taxa, prazo);
+      ? simularPorObjetivo(nInicial, nAporte, nTaxa, Number(objetivo))
+      : simularPorPrazo(nInicial, nAporte, nTaxa, Number(prazo));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inicial, aporte, taxa, objetivo, prazo, modo]);
 
