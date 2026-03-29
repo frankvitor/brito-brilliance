@@ -50,11 +50,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden md:block">
-          <Button variant="gold" size="lg" asChild>
-            <Link to="/simulador">Simular agora</Link>
-          </Button>
-        </div>
+        <div className="hidden md:block" />
 
         {/* Mobile toggle */}
         <button
@@ -83,9 +79,6 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Button variant="gold" size="lg" className="mt-6 w-full" asChild>
-            <Link to="/simulador">Simular agora</Link>
-          </Button>
         </div>
       )}
     </header>

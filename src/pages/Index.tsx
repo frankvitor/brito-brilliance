@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
-import { Eye, GitCompareArrows, Lightbulb, ArrowRight, Target, MessageCircle, User, Sparkles } from "lucide-react";
+import { Eye, Lightbulb, ArrowRight, Target, MessageCircle, User, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-consultant.jpg";
 
 
@@ -36,19 +36,13 @@ export default function Index() {
                 Pare de tomar decisões financeiras no escuro
               </h1>
               <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 md:text-lg">
-                Eu te ajudo a entender quanto investir, por quanto tempo e qual estratégia seguir — com clareza, segurança e acompanhamento real.
+                Eu te ajudo a organizar, planejar e tomar decisões financeiras com clareza, segurança e estratégia — de forma prática e personalizada.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Button variant="gold" size="lg" className="text-base px-10 py-3 h-auto" asChild>
                   <Link to="/contato">
-                    Agendar consulta gratuita
+                    Falar com especialista
                     <MessageCircle size={18} className="ml-1" />
-                  </Link>
-                </Button>
-                <Button variant="outline-light" size="lg" className="text-base px-8 py-3 h-auto" asChild>
-                  <Link to="/simulador">
-                    Usar simulador
-                    <ArrowRight size={18} className="ml-1" />
                   </Link>
                 </Button>
               </div>
@@ -63,10 +57,10 @@ export default function Index() {
           <ScrollReveal>
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-extrabold leading-tight text-white md:text-4xl">
-                Mais do que simular números: enxergar caminhos
+                Você não precisa de mais informações. Precisa de direção.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-white/65 md:text-lg">
-                A Brito Consultoria ajuda você a transformar números em decisões. Combinamos simulação prática com estratégia de investimento para trazer clareza, segurança e direção financeira.
+                A Brito Consultoria ajuda você a organizar sua vida financeira e tomar decisões com segurança — considerando seus objetivos, seu momento e sua realidade.
               </p>
             </div>
           </ScrollReveal>
@@ -76,18 +70,18 @@ export default function Index() {
             {[
               {
                 icon: Eye,
-                title: "Clareza para decidir",
-                desc: "Evite decisões baseadas em achismo. Visualize cenários antes de investir.",
+                title: "Decisão com clareza",
+                desc: "Pare de depender de achismo. Tenha um plano estruturado para cada decisão financeira importante.",
               },
               {
-                icon: GitCompareArrows,
-                title: "Comparação entre cenários",
-                desc: "Entenda como diferentes estratégias impactam seu resultado ao longo do tempo.",
+                icon: Target,
+                title: "Estratégia personalizada",
+                desc: "Nada de fórmulas prontas. Seu planejamento é construído com base no seu perfil e objetivos reais.",
               },
               {
                 icon: Lightbulb,
-                title: "Objetivos com estratégia",
-                desc: "Transforme metas financeiras em planos reais com prazo e consistência.",
+                title: "Acompanhamento prático",
+                desc: "Mais do que teoria: você sabe exatamente o que fazer, quando fazer e por quê.",
               },
             ].map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 90}>
@@ -200,7 +194,7 @@ export default function Index() {
                 Consultoria com experiência e visão prática
               </h2>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
-                Lucas Britto é Consultor Financeiro (CEA), especializado em investimentos e alocação de ativos. Seu trabalho é ajudar pessoas a investir melhor, com clareza e estratégia prática.
+                Lucas Britto é Consultor Financeiro (CEA), especializado em investimentos e alocação de ativos. Seu trabalho é ajudar pessoas a tomarem decisões financeiras mais inteligentes, com clareza, estratégia e foco em resultados reais.
               </p>
             </ScrollReveal>
           </div>
@@ -216,16 +210,14 @@ export default function Index() {
               Comece a planejar seu futuro hoje
             </h2>
             <p className="mx-auto mt-5 max-w-md text-white/60">
-              Use o simulador ou fale diretamente com um consultor para montar sua estratégia.
+              Fale com um consultor e monte sua estratégia financeira personalizada.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               <Button variant="gold" size="lg" asChild>
-                <Link to="/simulador">Simular agora</Link>
+                <Link to="/contato">Falar com especialista</Link>
               </Button>
               <Button variant="outline-light" size="lg" asChild>
-                <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">
-                  Falar com consultor
-                </a>
+                <Link to="/simulador">Usar simulador</Link>
               </Button>
             </div>
           </ScrollReveal>
