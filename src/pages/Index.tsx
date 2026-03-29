@@ -30,18 +30,24 @@ export default function Index() {
           <div className="max-w-2xl">
             <ScrollReveal>
               <span className="inline-block rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-gold">
-                Planejamento financeiro estratégico
+                Consultoria financeira estratégica
               </span>
               <h1 className="mt-7 text-[2.25rem] font-extrabold leading-[1.08] tracking-tight text-white md:text-[2.75rem] lg:text-[3.75rem]">
-                Transforme seus objetivos financeiros em um plano claro
+                Pare de tomar decisões financeiras no escuro
               </h1>
               <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 md:text-lg">
-                Entenda quanto investir, por quanto tempo e qual estratégia seguir para alcançar seus objetivos.
+                Eu te ajudo a entender quanto investir, por quanto tempo e qual estratégia seguir — com clareza, segurança e acompanhamento real.
               </p>
-              <div className="mt-10">
+              <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Button variant="gold" size="lg" className="text-base px-10 py-3 h-auto" asChild>
+                  <Link to="/contato">
+                    Agendar consulta gratuita
+                    <MessageCircle size={18} className="ml-1" />
+                  </Link>
+                </Button>
+                <Button variant="outline-light" size="lg" className="text-base px-8 py-3 h-auto" asChild>
                   <Link to="/simulador">
-                    Simular agora
+                    Usar simulador
                     <ArrowRight size={18} className="ml-1" />
                   </Link>
                 </Button>
