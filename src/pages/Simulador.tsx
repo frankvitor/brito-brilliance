@@ -147,7 +147,7 @@ export default function Simulador() {
     if (!resultado || !resultado.metaAtingida) return null;
     const TAXA_POUPANCA = 6;
     if (modo === "objetivo") {
-      const resPoupanca = simularPorObjetivo(inicial, aporte, TAXA_POUPANCA, objetivo);
+      const resPoupanca = simularPorObjetivo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(objetivo));
       return {
         tempoPoupanca: resPoupanca.meses,
         tempoSimulado: resultado.meses,
@@ -155,7 +155,7 @@ export default function Simulador() {
         diferencaMeses: resPoupanca.metaAtingida ? resPoupanca.meses - resultado.meses : null,
       };
     } else {
-      const resPoupanca = simularPorPrazo(inicial, aporte, TAXA_POUPANCA, prazo);
+      const resPoupanca = simularPorPrazo(Number(inicial), Number(aporte), TAXA_POUPANCA, Number(prazo));
       return {
         valorPoupanca: resPoupanca.acumulado,
         valorSimulado: resultado.acumulado,
@@ -212,7 +212,7 @@ export default function Simulador() {
                       <TrendingUp className="h-4 w-4 text-gold" />
                       Valor que você quer alcançar (R$)
                     </label>
-                    <Input type="number" min={1} value={objetivo} onChange={(e) => setObjetivo(Number(e.target.value))} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="number" min={1} value={objetivo} onChange={handleChange("objetivo", setObjetivo)} placeholder="1000000" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.objetivo && <p className="mt-1 text-xs text-red-500">{errors.objetivo}</p>}
                   </div>
                 ) : (
@@ -221,24 +221,24 @@ export default function Simulador() {
                       <Clock className="h-4 w-4 text-gold" />
                       Prazo de investimento (anos)
                     </label>
-                    <Input type="number" min={1} step={1} value={prazo} onChange={(e) => setPrazo(Number(e.target.value))} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
+                    <Input type="number" min={1} step={1} value={prazo} onChange={handleChange("prazo", setPrazo)} placeholder="20" className="border-gold/20 bg-white text-lg font-semibold" />
                     {errors.prazo && <p className="mt-1 text-xs text-red-500">{errors.prazo}</p>}
                   </div>
                 )}
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Valor inicial (R$)</label>
-                  <Input type="number" min={0} value={inicial} onChange={(e) => setInicial(Number(e.target.value))} placeholder="10000" />
+                  <Input type="number" min={0} value={inicial} onChange={handleChange("inicial", setInicial)} placeholder="10000" />
                   {errors.inicial && <p className="mt-1 text-xs text-red-500">{errors.inicial}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Aporte mensal (R$)</label>
-                  <Input type="number" min={0} value={aporte} onChange={(e) => setAporte(Number(e.target.value))} placeholder="2000" />
+                  <Input type="number" min={0} value={aporte} onChange={handleChange("aporte", setAporte)} placeholder="2000" />
                   {errors.aporte && <p className="mt-1 text-xs text-red-500">{errors.aporte}</p>}
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-blue-deep">Taxa (% ao ano)</label>
-                  <Input type="number" min={0} step={0.5} value={taxa} onChange={(e) => setTaxa(Number(e.target.value))} placeholder="12" />
+                  <Input type="number" min={0} step={0.5} value={taxa} onChange={handleChange("taxa", setTaxa)} placeholder="12" />
                   {errors.taxa && <p className="mt-1 text-xs text-red-500">{errors.taxa}</p>}
                   <p className="mt-1.5 text-xs text-muted-foreground">Exemplo: 8% ao ano, 10% ao ano, 12% ao ano</p>
                 </div>
