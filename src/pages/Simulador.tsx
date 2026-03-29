@@ -154,6 +154,7 @@ export default function Simulador() {
         tempoPoupanca: resPoupanca.meses,
         tempoInvestimento: resultado.meses,
         diferencaMeses: resPoupanca.meses - resultado.meses,
+        metaAtingidaPoupanca: resPoupanca.metaAtingida,
       };
     } else {
       const resPoupanca = simularPorPrazo(Number(normalizeNumeric(inicial)), Number(normalizeNumeric(aporte)), TAXA_POUPANCA, Number(normalizeNumeric(prazo)));
@@ -161,6 +162,7 @@ export default function Simulador() {
         valorPoupanca: resPoupanca.acumulado,
         valorSimulado: resultado.acumulado,
         diferenca: resultado.acumulado - resPoupanca.acumulado,
+        metaAtingidaPoupanca: true,
       };
     }
   }, [resultado, modo, inicial, aporte, objetivo, prazo, taxa]);
