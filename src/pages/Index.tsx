@@ -6,8 +6,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 
 // Fotos do Lucas
-import lucasHeroImg from "@/assets/consultor.jpg";
-import lucasPrimocastImg from "@/assets/hero-consultant.jpg";
+import lucasHeroImg from "@/assets/hero-consultant.jpg";
+import lucasPrimocastImg from "@/assets/consultor.jpg";
 import portfelLogoImg from "@/assets/portfel-logo.png";
 import grupoPrimoLogoImg from "@/assets/grupo-primo-logo.png";
 
