@@ -19,7 +19,7 @@ export default function Index() {
       {/* ══════════ HERO ══════════ */}
       <section
         className="relative min-h-screen flex items-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0D2040 0%, #142d54 50%, #1a3a6a 100%)" }}
+        style={{ backgroundColor: "#F5F0E8" }}
       >
 
         <div className="container-site relative z-10 grid items-center gap-16 pt-32 pb-20 md:grid-cols-2 md:pt-36 md:pb-28">
