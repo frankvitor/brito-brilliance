@@ -5,11 +5,10 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Eye, Lightbulb, ArrowRight, Target, MessageCircle, Sparkles, Shield, TrendingUp, Award } from "lucide-react";
 
-// Fotos do Lucas — adicione os arquivos em src/assets/
-import heroImg from "@/assets/lucas-primocast.jpg";       // foto sentado no PrimoCast (IMG-WA0083 ou 0084)
-import lucasOficialImg from "@/assets/lucas-oficial.jpg"; // foto blazer cinza escritório (IMG-WA0080)
-import portfelLogoImg from "@/assets/portfel-logo.png";   // logo da Portfel (extraia do IMG-WA0090 ou use SVG)
-import grupoPrimoLogoImg from "@/assets/grupo-primo-logo.png"; // logo Grupo Primo (IMG-WA0092)
+import heroImg from "@/assets/hero-consultant.jpg";
+import lucasOficialImg from "@/assets/consultor.jpg";
+import portfelLogoImg from "@/assets/portfel-logo.png";
+import grupoPrimoLogoImg from "@/assets/grupo-primo-logo.png";
 
 export default function Index() {
   return (
