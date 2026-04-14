@@ -95,23 +95,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ══════════ FAIXA PORTFEL ══════════ */}
-      <section style={{ backgroundColor: "#0D2040" }} className="py-12">
-        <div className="container-site">
-          <ScrollReveal>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto">
-              <p className="text-center md:text-left text-sm font-medium" style={{ color: "rgba(245,240,232,0.6)" }}>
-                Consultor parceiro da <strong style={{ color: "#F5F0E8" }}>Portfel</strong> — uma empresa <strong style={{ color: "#F5F0E8" }}>Grupo Primo</strong>
-              </p>
-              <div className="flex items-center gap-6 shrink-0">
-                <img src={portfelLogoImg} alt="Portfel" className="h-8" style={{ filter: "brightness(0) invert(1)", opacity: 0.8 }} />
-                <div className="h-5 w-px" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
-                <img src={grupoPrimoLogoImg} alt="Grupo Primo" className="h-6" style={{ filter: "brightness(0) invert(1)", opacity: 0.8 }} />
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
 
       {/* ══════════ DIFERENCIAIS ══════════ */}
       <section className="py-24 md:py-32" style={{ backgroundColor: "#F5F0E8" }}>
