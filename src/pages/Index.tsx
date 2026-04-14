@@ -19,17 +19,8 @@ export default function Index() {
       {/* ══════════ HERO ══════════ */}
       <section
         className="relative min-h-screen flex items-center overflow-hidden"
-        style={{ backgroundColor: "#F5F0E8" }}
+        style={{ background: "linear-gradient(135deg, #0D2040 0%, #142d54 50%, #1a3a6a 100%)" }}
       >
-        {/* Grade decorativa sutil */}
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#0D2040 1px, transparent 1px), linear-gradient(90deg, #0D2040 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
 
         <div className="container-site relative z-10 grid items-center gap-16 pt-32 pb-20 md:grid-cols-2 md:pt-36 md:pb-28">
 
@@ -46,14 +37,14 @@ export default function Index() {
 
               <h1
                 className="text-[2.6rem] leading-[1.05] tracking-tight md:text-[3.4rem] lg:text-[4rem]"
-                style={{ fontFamily: "'Playfair Display', 'Georgia', serif", fontWeight: 700, color: "#0D2040" }}
+                style={{ fontFamily: "'Playfair Display', 'Georgia', serif", fontWeight: 700, color: "#F5F0E8" }}
               >
                 Quando você me contrata, você não contrata só um consultor.
               </h1>
 
               <p
                 className="mt-6 max-w-md text-base leading-relaxed md:text-lg"
-                style={{ color: "#4A5568" }}
+                style={{ color: "rgba(245,240,232,0.7)" }}
               >
                 Você tem acesso a uma estrutura completa de soluções, pensadas para o seu momento e sempre alinhadas ao seu interesse.
               </p>
@@ -62,36 +53,19 @@ export default function Index() {
                 <Link
                   to="/contato"
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-base transition-all hover:opacity-90"
-                  style={{ backgroundColor: "#0D2040", color: "#F5F0E8" }}
+                  style={{ backgroundColor: "#C9A84C", color: "#0D2040" }}
                 >
                   Falar com Lucas <MessageCircle size={18} />
                 </Link>
                 <Link
                   to="/sobre"
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-base border transition-all"
-                  style={{ borderColor: "#0D2040", color: "#0D2040" }}
+                  style={{ borderColor: "rgba(245,240,232,0.3)", color: "#F5F0E8" }}
                 >
                   Saiba mais <ArrowRight size={18} />
                 </Link>
               </div>
 
-              {/* Logos parceiros */}
-              <div className="mt-12 flex items-center gap-5 flex-wrap">
-                <span className="text-xs uppercase tracking-wider" style={{ color: "#9CA3AF" }}>Em parceria com</span>
-                <img
-                  src={portfelLogoImg}
-                  alt="Portfel"
-                  className="h-6 opacity-50 hover:opacity-80 transition-opacity"
-                  style={{ filter: "brightness(0) saturate(100%) invert(10%) sepia(40%) saturate(700%) hue-rotate(195deg)" }}
-                />
-                <div className="h-4 w-px" style={{ backgroundColor: "#D1C7B4" }} />
-                <img
-                  src={grupoPrimoLogoImg}
-                  alt="Grupo Primo"
-                  className="h-5 opacity-50 hover:opacity-80 transition-opacity"
-                  style={{ filter: "brightness(0) saturate(100%) invert(10%) sepia(40%) saturate(700%) hue-rotate(195deg)" }}
-                />
-              </div>
             </div>
           </ScrollReveal>
 
