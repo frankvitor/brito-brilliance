@@ -19,17 +19,8 @@ export default function Index() {
       {/* ══════════ HERO ══════════ */}
       <section
         className="relative min-h-screen flex items-center overflow-hidden"
-        style={{ backgroundColor: "#F5F0E8" }}
+        style={{ background: "linear-gradient(135deg, #0D2040 0%, #142d54 50%, #1a3a6a 100%)" }}
       >
-        {/* Grade decorativa sutil */}
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#0D2040 1px, transparent 1px), linear-gradient(90deg, #0D2040 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
 
         <div className="container-site relative z-10 grid items-center gap-16 pt-32 pb-20 md:grid-cols-2 md:pt-36 md:pb-28">
 
@@ -75,23 +66,6 @@ export default function Index() {
                 </Link>
               </div>
 
-              {/* Logos parceiros */}
-              <div className="mt-12 flex items-center gap-5 flex-wrap">
-                <span className="text-xs uppercase tracking-wider" style={{ color: "#9CA3AF" }}>Em parceria com</span>
-                <img
-                  src={portfelLogoImg}
-                  alt="Portfel"
-                  className="h-6 opacity-50 hover:opacity-80 transition-opacity"
-                  style={{ filter: "brightness(0) saturate(100%) invert(10%) sepia(40%) saturate(700%) hue-rotate(195deg)" }}
-                />
-                <div className="h-4 w-px" style={{ backgroundColor: "#D1C7B4" }} />
-                <img
-                  src={grupoPrimoLogoImg}
-                  alt="Grupo Primo"
-                  className="h-5 opacity-50 hover:opacity-80 transition-opacity"
-                  style={{ filter: "brightness(0) saturate(100%) invert(10%) sepia(40%) saturate(700%) hue-rotate(195deg)" }}
-                />
-              </div>
             </div>
           </ScrollReveal>
 
